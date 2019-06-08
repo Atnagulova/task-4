@@ -10,18 +10,34 @@ namespace Task_4
     {
         static void Main(string[] args)
         {
-            double e;//точность
-            double S=0;//сумма
-            e = WriteDouble("Введите точность: ");
+            double e=0;//точность 
+            double S = 0;//сумма
+            int i;
+            double Ts = 0;//текущая сумма           
 
-            for (int i = 1; i<Int32.MaxValue; i++)
+            while (e <= 0)
             {
-                S = S + (Math.Pow(-1, i) / Enumerable.Range(1, i).Aggregate((p, x) => p * x));
-            if (Math.Abs(S) < e)
+                e = WriteDouble("Введите точность: ");
+                e = Math.Round(e, 9);
+                Console.WriteLine(e);
+                if (e != 0)
                 {
-                    Console.WriteLine("Сумма выражения с заданной точностью {0} равна {1}", e, S);
-                    break;
-                }                
+                    S = 0;
+                    i = 1;
+                    Ts = (Math.Pow(-1, i) / Enumerable.Range(1, i).Aggregate((p, x) => p * x));
+                    while (Math.Abs(Ts) > e)
+                    {
+                        S += Ts;
+                        i++;
+                        Ts = (Math.Pow(-1, i) / Enumerable.Range(1, i).Aggregate((p, x) => p * x));
+                    }
+                    Console.WriteLine("Сумма выражения с заданной точностью {0} = {1}", e, S);
+                }
+                else
+                {
+                    Console.WriteLine("Введите e больше нуля!");
+                }
+
             }
             Console.ReadKey();
         }
@@ -30,12 +46,12 @@ namespace Task_4
             bool ok; double a;
             do
             {
-                Console.WriteLine(t);
+                Console.Write(t);
                 string buf = Console.ReadLine();
                 ok = double.TryParse(buf, out a);
-                if ((!ok) || (a<0))
+                if ((!ok) || (a<=0))
                     Console.WriteLine("Ошибка, введите положительное число");
-            } while ((!ok) || (a < 0));
+            } while ((!ok) || (a <= 0));
             return a;
         }
     }
